@@ -1,0 +1,36 @@
+/* Hide "Powered by Mintlify" branding */
+[class*="mintlify-branding"],
+[class*="powered-by"],
+footer [href*="mintlify"],
+footer a[href*="mintlify.com"],
+.footer-branding,
+div[class*="branding"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Alternative selectors that might work */
+footer div:has(a[href*="mintlify"]) {
+  display: none !important;
+}
+
+/* Hide any text containing "Powered by Mintlify" */
+footer *:contains("Powered by Mintlify"),
+footer *:contains("mintlify") {
+  display: none !important;
+}
+
+/* Generic footer link hiding */
+footer a[href*="mintlify"] {
+  display: none !important;
+}
+
+/* Hide entire footer if needed (more aggressive approach) */
+/*
+footer {
+  display: none !important;
+}
+*/ 
