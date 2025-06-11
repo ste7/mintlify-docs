@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "https://lumyo.co/api"
+      "url": "https://api.lumyo.co/api"
     }
   ],
   "security": [
