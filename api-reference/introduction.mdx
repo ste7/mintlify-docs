@@ -1,33 +1,79 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "Lumyo API Reference"
+description: "Documentation for integrating with Lumyo API"
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+# Welcome to Lumyo API
 
-## Welcome
+The Lumyo API enables you to programmatically access our platform's functionality. This document provides comprehensive information about available endpoints, authentication methods, and best practices for integration.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+## Base URL
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+All API requests should be made to the following base URL:
+
+```bash
+https://api.lumyo.co
+```
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+Lumyo uses API keys to authenticate requests. You can obtain your API key from the [Lumyo Dashboard](https://app.lumyo.co/settings).
+
+Include your API key in all requests using the `Authorization` header:
+
+```bash
+Authorization: Bearer your_api_key
+```
+
+<Note>
+  Keep your API keys secure. Do not share them in publicly accessible areas such
+  as GitHub, client-side code, or in API requests to third-party services.
+</Note>
+
+## Rate Limiting
+
+To ensure service stability, Lumyo API implements rate limiting 60 requests per minute. When you exceed your rate limit, the API will return a `429 Too Many Requests` response. The response headers include:
+
+```
+X-RateLimit-Limit: [requests allowed per period]
+X-RateLimit-Remaining: [requests remaining in period]
+X-RateLimit-Reset: [UTC timestamp when limit resets]
+```
+
+## Request Format
+
+The API accepts JSON-encoded request bodies. Set the Content-Type header accordingly:
+
+```bash
+Content-Type: application/json
+```
+
+## Response Format
+
+All responses are returned in JSON format. Successful requests return HTTP status codes in the `2xx` range, typically `200 OK` or `201 Created`.
+
+Error responses include HTTP status codes in the `4xx` or `5xx` range with a JSON body containing error details:
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
+{
+  "error": {
+    "code": "invalid_parameter",
+    "message": "The email parameter is invalid",
+    "param": "email"
   }
-]
+}
 ```
+
+Response headers include pagination metadata:
+
+```
+X-Total-Count: [total items]
+X-Total-Pages: [total pages]
+X-Current-Page: [current page]
+```
+
+## Support
+
+If you encounter any issues or have questions about our API you can contact our support at support@lumyo.co
+
+We strive to respond to all support inquiries within 24 hours.

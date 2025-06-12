@@ -1,0 +1,21 @@
+openapi: 3.0.3
+info:
+  title: Audiences API
+  version: 1.0.0
+
+servers:
+  - url: https://api.example.com
+
+paths:
+  /audiences:
+    get:
+      summary: List Audiences
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object

@@ -1,0 +1,210 @@
+openapi: 3.0.3
+info:
+  title: Contacts API
+  version: 1.0.0
+
+servers:
+  - url: https://api.example.com
+
+security:
+  - BearerAuth: []
+
+paths:
+  /contacts:
+    get:
+      summary: Get Contacts
+      description: Retrieve list of contacts
+      responses:
+        "200":
+          description: Contacts retrieved successfully
+          content:
+            application/json:
+              example:
+                - id: "01973694-44c1-73ad-80b8-37d8db0b6542"
+                  first_name: "Brent"
+                  last_name: "Bailey"
+                  email: "brent@unlockingpotentialllc.com"
+                  created_at: "2025-06-03T16:16:16.000000Z"
+                  metadata:
+                    phone: "+1234567890"
+                    company: "Unlocking Potential LLC"
+
+    post:
+      summary: Create Contact
+      description: Create a new contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              first_name: "John"
+              last_name: "Doe"
+              email: "john@example.com"
+              metadata:
+                phone: "+1234567890"
+                company: "Example Corp"
+      responses:
+        "201":
+          description: Contact created successfully
+          content:
+            application/json:
+              example:
+                id: "01973694-44c1-73ad-80b8-37d8db0b6542"
+                first_name: "John"
+                last_name: "Doe"
+                email: "john@example.com"
+                created_at: "2025-06-03T16:16:16.000000Z"
+                metadata:
+                  phone: "+1234567890"
+                  company: "Example Corp"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              example:
+                message: "The given data was invalid."
+                errors:
+                  email: ["The email field is required."]
+
+  /contacts/{id}:
+    get:
+      summary: Get Contact
+      description: Retrieve a specific contact by its unique ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Contact retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  created_at:
+                    type: string
+                    format: date-time
+                  metadata:
+                    type: object
+              example:
+                id: "01973694-44c1-73ad-80b8-37d8db0b6542"
+                first_name: "Brent"
+                last_name: "Bailey"
+                email: "brent@unlockingpotentialllc.com"
+                created_at: "2025-06-03T16:16:16.000000Z"
+                metadata:
+                  phone: "+1234567890"
+                  company: "Unlocking Potential LLC"
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: string
+              example:
+                message: "Unauthenticated."
+                error: "unauthenticated"
+        "404":
+          description: Contact not found
+          content:
+            application/json:
+              example:
+                message: "Contact not found."
+
+    put:
+      summary: Update Contact
+      description: Update an existing contact
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              first_name: "Brent"
+              last_name: "Bailey"
+              email: "brent.bailey@unlockingpotentialllc.com"
+              metadata:
+                phone: "+1234567890"
+                company: "Unlocking Potential LLC"
+                job_title: "CEO"
+      responses:
+        "200":
+          description: Contact updated successfully
+          content:
+            application/json:
+              example:
+                id: "01973694-44c1-73ad-80b8-37d8db0b6542"
+                first_name: "Brent"
+                last_name: "Bailey"
+                email: "brent.bailey@unlockingpotentialllc.com"
+                created_at: "2025-06-03T16:16:16.000000Z"
+                updated_at: "2025-06-03T17:30:45.000000Z"
+                metadata:
+                  phone: "+1234567890"
+                  company: "Unlocking Potential LLC"
+                  job_title: "CEO"
+        "404":
+          description: Contact not found
+          content:
+            application/json:
+              example:
+                message: "Contact not found."
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              example:
+                message: "The given data was invalid."
+                errors:
+                  email: ["The email format is invalid."]
+
+    delete:
+      summary: Delete Contact
+      description: Delete a contact
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Contact deleted successfully
+        "404":
+          description: Contact not found
+          content:
+            application/json:
+              example:
+                message: "Contact not found."
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
