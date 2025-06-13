@@ -4,18 +4,167 @@ info:
   version: 1.0.0
 
 servers:
-  - url: https://api.example.com
+  - url: https://api.lumyi.co
+
+security:
+  - BearerAuth: []
 
 paths:
   /audiences:
     get:
-      summary: List Audiences
+      summary: Get Audiences
+      description: Retrieve list of audiences
       responses:
         "200":
-          description: Success
+          description: Audiences retrieved successfully
+          content:
+            application/json:
+              example:
+                - id: "01973694-44c1-73ad-80b8-37d8db0b6542"
+                  name: "Newsletter Subscribers"
+                  created_at: "2025-06-03T16:16:16.000000Z"
+
+    post:
+      summary: Create Audience
+      description: Create a new audience
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              name: "Newsletter Subscribers"
+      responses:
+        "201":
+          description: Audience created successfully
+          content:
+            application/json:
+              example:
+                - id: "01973694-44c1-73ad-80b8-37d8db0b6542"
+                  name: "Newsletter Subscribers"
+                  created_at: "2025-06-03T16:16:16.000000Z"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              example:
+                message: "The given data was invalid."
+                errors:
+                  name: ["The name field is required."]
+
+  /audiences/{id}:
+    get:
+      summary: Get Audience
+      description: Retrieve a specific audience by its unique ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Audience retrieved successfully
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+              example:
+                id: "01973694-44c1-73ad-80b8-37d8db0b6542"
+                name: "Newsletter Subscribers"
+                created_at: "2025-06-03T16:16:16.000000Z"
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: string
+              example:
+                message: "Unauthenticated."
+                error: "unauthenticated"
+        "404":
+          description: Audience not found
+          content:
+            application/json:
+              example:
+                message: "Audience not found."
+
+    put:
+      summary: Update Audience
+      description: Update an existing audience
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              name: "Newsletter Subscribers"
+      responses:
+        "200":
+          description: Audience updated successfully
+          content:
+            application/json:
+              example:
+                id: "01973694-44c1-73ad-80b8-37d8db0b6542"
+                name: "Newsletter Subscribers"
+                created_at: "2025-06-03T16:16:16.000000Z"
+        "404":
+          description: Audience not found
+          content:
+            application/json:
+              example:
+                message: "Audience not found."
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              example:
+                message: "The given data was invalid."
+                errors:
+                  email: ["The email format is invalid."]
+
+    delete:
+      summary: Delete Audience
+      description: Delete an audience
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Audience deleted successfully
+        "404":
+          description: Audience not found
+          content:
+            application/json:
+              example:
+                message: "Audience not found."
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

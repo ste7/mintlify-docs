@@ -27,6 +27,7 @@
           "api-reference/audiences/get",
           "api-reference/audiences/find",
           "api-reference/audiences/create",
+          "api-reference/audiences/update",
           "api-reference/audiences/delete"
         ]
       },
